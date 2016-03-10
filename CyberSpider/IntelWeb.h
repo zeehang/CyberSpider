@@ -8,6 +8,7 @@
 #include <sstream>  // needed in addition to <iostream> for string stream I/O
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 class IntelWeb
 {
@@ -30,6 +31,7 @@ private:
     DiskMultiMap reverse;
     DiskMultiMap contact;
     std::string file_prefix;
+    unordered_map<std::string, unsigned int> prevalence; //the object and the number of times its in it
     // Your private member declarations will go here
 };
 

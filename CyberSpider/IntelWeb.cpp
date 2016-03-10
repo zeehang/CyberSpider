@@ -6,7 +6,7 @@
 //  Copyright © 2016 Michael Zhang. All rights reserved.
 //
 #include "IntelWeb.h"
-#include <stdio.h>
+
 IntelWeb::IntelWeb()
 {
     
@@ -22,9 +22,10 @@ bool IntelWeb::createNew(const std::string& filePrefix, unsigned int maxDataItem
 {
     close();
     //int loadFactor = 0.75;
-    unsigned int numBuckets = maxDataItems *4 /3;
+    unsigned int numBuckets = maxDataItems/.75;
+    std::cerr << "Number of buckets: " << numBuckets << std::endl;
     close();
-    if (!initiator.createNew(filePrefix + "initiator.dat", numBuckets) || !reverse.createNew(filePrefix + "reverse.dat",  numBuckets))
+    if (!initiator.createNew((filePrefix + "initiator.dat"), numBuckets) || !reverse.createNew((filePrefix + "reverse.dat"),  numBuckets))
     {
         return false;
     }
@@ -57,8 +58,6 @@ bool IntelWeb::ingest(const std::string &telemetryFile)
         cout << "Cannot open expenses file!" << endl;
         return false;
     }
-    if (!openExisting(file_prefix))
-        return false;
     std::string line;
     while(getline(inf, line))
     {
@@ -72,17 +71,23 @@ bool IntelWeb::ingest(const std::string &telemetryFile)
             continue;
         }
         if(!initiator.insert(to, from, context) || !reverse.insert(from, to , context))
+        {
             return false;
+            
+        }
     }
     return true;
 }
 
-unsigned int crawl(const std::vector<std::string>& indicators,
+unsigned int IntelWeb::crawl(const std::vector<std::string>& indicators,
                    unsigned int minPrevalenceToBeGood,
                    std::vector<std::string>& badEntitiesFound,
                    std::vector<InteractionTuple>& badInteractions
                    )
 {
+    //FIND THE PREVALENCE FIRST
+    DiskMultiMap::Iterator it;
+    
     
     return badEntitiesFound.size();
 }

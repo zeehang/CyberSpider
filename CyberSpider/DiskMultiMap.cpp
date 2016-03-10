@@ -27,7 +27,7 @@ bool DiskMultiMap::createNew(const std::string &filename, unsigned int numBucket
         return false;
     numKeys = numBuckets;
     Header h;
-    h.head = sizeof(Header);
+    h.head = numBuckets;
     h.freeList = 0;
     if (tracker.write(h, 0) == false)
         return false;
@@ -59,37 +59,46 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
     if(key.length() > 120 || value.length() >120 || context.length() > 120)
         return false;
     BinaryFile::Offset keyToInsert = hashFunction(key);
-    
+    std::cerr<< "Node with Key: " << key << std::endl;
+    std::cerr<<"Location of Bucket; " << keyToInsert << std::endl;
+    BinaryFile::Offset testnew;
     BinaryFile::Offset addressWhereNodePointsTO;
     DiskNode toInsert;
     strcpy(toInsert.key, key.c_str());
     strcpy(toInsert.value, value.c_str());
     strcpy(toInsert.context, context.c_str());
     BinaryFile::Offset none = 0;
-    toInsert.next = none;
-    tracker.read(addressWhereNodePointsTO, sizeof(Header)+ keyToInsert);
+   // toInsert.next = none;
+    tracker.read(addressWhereNodePointsTO, keyToInsert);
     BinaryFile::Offset locOfNewNode = acquireNode();
-    std::cerr << "Adress where node points to; "<< addressWhereNodePointsTO << std::endl;
-    if(addressWhereNodePointsTO == 0)
-    {
-        tracker.write(locOfNewNode, sizeof(Header)+ keyToInsert);
-        tracker.write(toInsert, locOfNewNode);
-        
-    }
-    else{
-        DiskNode iter;
-        tracker.write(toInsert, locOfNewNode);
-        tracker.read(iter, addressWhereNodePointsTO);
-        while (iter.next != 0)
-        {
-            addressWhereNodePointsTO = iter.next;
-            tracker.read(iter, addressWhereNodePointsTO);
-        }
-        iter.next = locOfNewNode;
-        tracker.write(iter, addressWhereNodePointsTO);
-        //CHANGE THIS SO toinsert.next points to wear the binary offset of the bucket used to be - then apply this philosophy to erase
-        
-    }
+    std::cerr << "Address where bucket points to; "<< addressWhereNodePointsTO << std::endl;
+    //TESTING CODE REMOVE LATER
+    BinaryFile::Offset prevValue;
+    toInsert.next = addressWhereNodePointsTO;
+    tracker.write(locOfNewNode, keyToInsert);
+    tracker.write(toInsert, locOfNewNode);
+//    if(addressWhereNodePointsTO == 0)
+//    {
+//        tracker.write(locOfNewNode, keyToInsert);
+//        tracker.write(toInsert, locOfNewNode);
+//        
+//    }
+//    else{
+//        DiskNode iter;
+//        tracker.write(toInsert, locOfNewNode);
+//        tracker.read(iter, addressWhereNodePointsTO);
+//        while (iter.next != 0)
+//        {
+//            addressWhereNodePointsTO = iter.next;
+//            tracker.read(iter, addressWhereNodePointsTO);
+//        }
+//        iter.next = locOfNewNode;
+//        tracker.write(iter, addressWhereNodePointsTO);
+//        //CHANGE THIS SO toinsert.next points to wear the binary offset of the bucket used to be - then apply this philosophy to erase
+//        
+//    }
+    tracker.read(prevValue, keyToInsert-1);
+    std::cerr << "Previous bucket value: " << prevValue << endl;
     std::cerr << "Inserting new node at location: " << locOfNewNode << std::endl;
     return true;
 
@@ -100,7 +109,7 @@ DiskMultiMap::Iterator DiskMultiMap::search(const std::string& key)
     
     BinaryFile::Offset bucketLocation = hashFunction(key);
     BinaryFile::Offset temp;
-    tracker.read(temp, bucketLocation + sizeof(Header));
+    tracker.read(temp, bucketLocation);
     if (temp == 0)
     {
         Iterator toReturn;
@@ -115,8 +124,11 @@ DiskMultiMap::Iterator DiskMultiMap::search(const std::string& key)
 BinaryFile::Offset DiskMultiMap::hashFunction (const std::string& input)
 {
     hash<std::string> hasher;
+    Header h;
+    tracker.read(h, 0);
+    int numSplit = h.head;
     unsigned int newHash = hasher(input);
-    BinaryFile::Offset bucketLocation = newHash % numKeys;
+    BinaryFile::Offset bucketLocation = newHash % numSplit  + sizeof(Header);
     return bucketLocation;
 }
 
@@ -127,7 +139,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
     BinaryFile::Offset bucketLoc = hashFunction(key);
     BinaryFile::Offset locofNode;
     BinaryFile::Offset none = 0;
-    tracker.read(locofNode, bucketLoc + sizeof(Header));
+    tracker.read(locofNode, bucketLoc /*+ sizeof(Header)*/);
     if (locofNode == 0)
         return 0;
 
@@ -153,7 +165,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
                     if (previous == 0) //the first one after the bucket
                     {
                         BinaryFile::Offset newLocofNode = iter.next;
-                        tracker.write(newLocofNode, bucketLoc + sizeof(Header));
+                        tracker.write(newLocofNode, bucketLoc/* + sizeof(Header)*/);
                     }
                     else
                     {
@@ -200,7 +212,10 @@ BinaryFile::Offset DiskMultiMap::acquireNode()
     Header h;
     tracker.read(h, 0);
     if (h.freeList == 0)
-        return tracker.fileLength();
+    {
+        BinaryFile::Offset toReturn = tracker.fileLength();
+        return toReturn;
+    }
     else
     {
         BinaryFile::Offset toReturn = h.freeList;
