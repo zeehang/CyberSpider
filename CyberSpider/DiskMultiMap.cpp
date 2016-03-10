@@ -27,7 +27,7 @@ bool DiskMultiMap::createNew(const std::string &filename, unsigned int numBucket
     numKeys = numBuckets;
     Header h;
     h.head = sizeof(Header);
-    h.freeList = sizeof(Header);
+    h.freeList = 0;
     if (tracker.write(h, 0) == false)
         return false;
     BinaryFile::Offset bucketInit = 0;
@@ -99,7 +99,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
     BinaryFile::Offset none  = 0;
     toInsert.next = none;
     tracker.read(addressWhereNodePointsTO, sizeof(Header)+ keyToInsert);
-    BinaryFile::Offset locOfNewNode = tracker.fileLength();
+    BinaryFile::Offset locOfNewNode = acquireNode();
     if(addressWhereNodePointsTO == 0)
     {
         tracker.write(locOfNewNode, sizeof(Header)+ keyToInsert);
