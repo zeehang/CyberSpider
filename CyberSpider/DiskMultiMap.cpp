@@ -222,12 +222,12 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
         BinaryFile::Offset current;
         BinaryFile::Offset previous;
         BinaryFile::Offset oldNext;
-        BinaryFile::Offset none = 0;
         DiskNode iter;
-        tracker.read(iter, current);
+        
         Header h;
         tracker.read(h, 0);
         current = locofNode;
+        tracker.read(iter, current);
         previous = 0;
         do{
             tracker.read(iter, current);
@@ -326,7 +326,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
             current = oldNext;
             }
             
-        }while(current != 32767);
+        }while(current != 0);
 
     }
     return nodesDeleted;
