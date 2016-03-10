@@ -64,4 +64,8 @@ int main()
         cout << "I didn't erase this item cause it wasn't there\n";
     if (x.erase("blah.exe", "bletch.exe", "m003") == 0)
         cout << "It works!";
+    x.insert("hmm.exe", "pfft.exe", "m52902");
+    x.insert("hmm.exe", "pfft.exe", "m52902");
+    x.insert("hmm.exe", "pfft.exe", "m10001");
+      x.insert("hmm.exe", "pfft.exe", "m10001");
 }

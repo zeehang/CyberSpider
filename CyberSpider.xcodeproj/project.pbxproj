@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B4DCB1781C8FC72600B1CCA2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB1771C8FC72600B1CCA2 /* main.cpp */; };
 		B4DCB1981C8FE8C600B1CCA2 /* DiskMultiMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */; settings = {ASSET_TAGS = (); }; };
+		B4DCB19D1C9175E400B1CCA2 /* IntelWeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -32,6 +33,7 @@
 		B4DCB1811C8FC7DD00B1CCA2 /* MultiMapTuple.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MultiMapTuple.h; sourceTree = "<group>"; };
 		B4DCB1821C8FCB9F00B1CCA2 /* IntelWeb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntelWeb.h; sourceTree = "<group>"; };
 		B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskMultiMap.cpp; sourceTree = "<group>"; };
+		B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntelWeb.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				B4DCB1771C8FC72600B1CCA2 /* main.cpp */,
 				B4DCB17E1C8FC72F00B1CCA2 /* BinaryFile.h */,
 				B4DCB1821C8FCB9F00B1CCA2 /* IntelWeb.h */,
+				B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */,
 				B4DCB17F1C8FC73B00B1CCA2 /* DiskMultiMap.h */,
 				B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */,
 				B4DCB1801C8FC7C100B1CCA2 /* InteractionTuple.h */,
@@ -132,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4DCB1781C8FC72600B1CCA2 /* main.cpp in Sources */,
+				B4DCB19D1C9175E400B1CCA2 /* IntelWeb.cpp in Sources */,
 				B4DCB1981C8FE8C600B1CCA2 /* DiskMultiMap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

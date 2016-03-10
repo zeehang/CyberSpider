@@ -120,7 +120,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
         //CHANGE THIS SO toinsert.next points to wear the binary offset of the bucket used to be - then apply this philosophy to erase
         
     }
-   
+    std::cerr << "Inserting new node at location: " << locOfNewNode << std::endl;
     return true;
 
 }
@@ -236,7 +236,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
             if (iter.key == key && iter.value == value && iter.context == context)
             {
 
-                
+                    std::cerr << "Erasing node at location: " << current << std::endl;
                     if (previous == 0) //the first one after the bucket
                     {
                         BinaryFile::Offset newLocofNode = iter.next;

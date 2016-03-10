@@ -2,6 +2,10 @@
 #define INTELWEB_H_
 
 #include "InteractionTuple.h"
+#include "DiskMultiMap.h"
+#include <iostream> // needed for any I/O
+#include <fstream>  // needed in addition to <iostream> for file I/O
+#include <sstream>  // needed in addition to <iostream> for string stream I/O
 #include <string>
 #include <vector>
 
@@ -22,6 +26,10 @@ public:
     bool purge(const std::string& entity);
     
 private:
+    DiskMultiMap initiator;
+    DiskMultiMap reverse;
+    DiskMultiMap contact;
+    std::string file_prefix;
     // Your private member declarations will go here
 };
 
