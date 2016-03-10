@@ -53,40 +53,7 @@ void DiskMultiMap::close()
 
 bool DiskMultiMap::insert(const std::string& key, const std::string& value, const std::string& context)
 {
-//    if(key.length() > 120 || value.length() >120 || context.length() > 120)
-//        return false;
-//    BinaryFile::Offset keyToInsert = hashFunction(key);
-//    
-//    BinaryFile::Offset addressWhereNodePointsTO;
-//    DiskNode toInsert;
-//    strcpy(toInsert.key, key.c_str());
-//    strcpy(toInsert.value, value.c_str());
-//    strcpy(toInsert.context, context.c_str());
-//    BinaryFile::Offset none  = 0;
-//    toInsert.next = none;
-//    tracker.read(addressWhereNodePointsTO, sizeof(Header)+ keyToInsert);
-//    BinaryFile::Offset locOfNewNode = tracker.fileLength();
-//    if(addressWhereNodePointsTO == 0)
-//    {
-//        tracker.write(locOfNewNode, sizeof(Header)+ keyToInsert);
-//        tracker.write(toInsert, locOfNewNode);
-//
-//    }
-//    else{
-//        DiskNode iter;
-//        tracker.write(toInsert, locOfNewNode);
-//        tracker.read(iter, addressWhereNodePointsTO);
-//        while (iter.next != 0)
-//        {
-//            addressWhereNodePointsTO = iter.next;
-//            tracker.read(iter, addressWhereNodePointsTO);
-//        }
-//        iter.next = locOfNewNode;
-//        tracker.write(iter, addressWhereNodePointsTO);
-//        
-//        
-//    }
-//    return true;
+
     if(key.length() > 120 || value.length() >120 || context.length() > 120)
         return false;
     BinaryFile::Offset keyToInsert = hashFunction(key);
@@ -96,7 +63,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
     strcpy(toInsert.key, key.c_str());
     strcpy(toInsert.value, value.c_str());
     strcpy(toInsert.context, context.c_str());
-    BinaryFile::Offset none  = 0;
+    BinaryFile::Offset none = 0;
     toInsert.next = none;
     tracker.read(addressWhereNodePointsTO, sizeof(Header)+ keyToInsert);
     BinaryFile::Offset locOfNewNode = acquireNode();
@@ -160,64 +127,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
     tracker.read(locofNode, bucketLoc + sizeof(Header));
     if (locofNode == 0)
         return 0;
-//    else
-//    {
-//        tracker.read(checkValues, locofNode);
-//        if (checkValues.key == key && checkValues.value == value && checkValues.context == context)
-//        {
-//            //checkValues is the node to be deleted
-//            BinaryFile::Offset locofNextNode;
-//            DiskNode nextNode;
-//            DiskNode iter;
-//            locofNextNode = checkValues.next;
-//            Header h;
-//            tracker.read(h, 0);
-//            if (locofNextNode == 0) //this means there is only one node with that key
-//            {
-//                tracker.write(none, bucketLoc + sizeof(Header));
-//                if (h.freeList == 0)
-//                {
-//                    h.freeList = locofNode;
-//                    tracker.write(h,0);
-//                }
-//                else
-//                {
-//                    checkValues.next = h.freeList;
-//                    h.freeList = locofNode;
-//                    tracker.write(h, 0);
-//                    tracker.write(checkValues, locofNode);
-//                }
-//                nodesDeleted++;
-//            }
-////            else //more than one node with that key
-////            {
-////                iter = checkValues;
-////                BinaryFile::Offset locOfPreviouslyDeleted;
-////                locOfPreviouslyDeleted = locofNode;
-////                do{
-////                    if (iter.key == key && iter.value == value && iter.context == context)
-////                    {
-////                    if (h.freeList == 0)
-////                        h.freeList = locofNode;
-////                    else
-////                    {
-////                        checkValues.next = h.freeList;
-////                        h.freeList = locofNode;
-////                        tracker.write(h, 0);
-////                        tracker.write(checkValues, locofNode);
-////                    }
-////                    tracker.read(iter, iter.next);
-////                        nodesDeleted++;
-////                    }
-////                }while (iter.next !=0);
-////                //BUCKET ISN'T ZERO
-////            }
-//            else
-//            {
-//                
-//            }
-//        }
-//    }
+
     else{
         BinaryFile::Offset current;
         BinaryFile::Offset previous;
@@ -267,57 +177,7 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
                     if (previous !=0)
                         previous = current;
                     current = oldNext;
-                //                if (previous == 0) //the first one after the bucket
-//                {
-//                    BinaryFile::Offset newLocofNode = iter.next;
-//                    tracker.write(newLocofNode, bucketLoc + sizeof(Header));
-//                }
-                //UPDATE BUCKET
-                
-//                    if (h.freeList == 0)
-//                    {
-//                        h.freeList = current;
-//                        iter.next = none;
-//                        tracker.write(h,0);
-//                        tracker.write(iter, current);
-//                    }
-//                    else
-//                    {
-//                        iter.next = h.freeList;
-//                        h.freeList = current;
-//                        tracker.write(h, 0);
-//                        tracker.write(iter, current);
-//                    }
-//                    previous;
-//                    current = oldNext;
-//                }
-//                else
-//                {
-//                    BinaryFile::Offset newLocofNode;
-//                    DiskNode previousNewLink;
-//                    tracker.read(previousNewLink, previous);
-//                    previousNewLink.next = iter.next;
-//                    //next pointer on the deleted node??
-//                    if (h.freeList == 0)
-//                    {
-//                        tracker.write(previousNewLink, previous);
-//                        h.freeList = current;
-//                        iter.next = none;
-//                        tracker.write(iter, current);
-//                        tracker.write(h,0);
-//                    }
-//                    else{
-//                        iter.next = h.freeList;
-//                        h.freeList = current;
-//                        tracker.write(previousNewLink, previous);
-//                        tracker.write(iter, current);
-//                        tracker.write(h,0);
-//                    }
-//                    
-//                    previous = current;
-//                    current = oldNext;
-//               }
-                nodesDeleted++;
+                              nodesDeleted++;
                 
             }
             else{
