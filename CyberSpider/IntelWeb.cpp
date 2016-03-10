@@ -14,15 +14,17 @@ IntelWeb::IntelWeb()
 
 IntelWeb::~IntelWeb()
 {
+    close();
     //CLOSE OPEN FILES AND DELETE STUFF
 }
 
 bool IntelWeb::createNew(const std::string& filePrefix, unsigned int maxDataItems)
 {
+    close();
     //int loadFactor = 0.75;
     unsigned int numBuckets = maxDataItems *4 /3;
     close();
-    if (!initiator.createNew(filePrefix + "initiator", numBuckets) || !reverse.createNew(filePrefix + "reverse",  numBuckets))
+    if (!initiator.createNew(filePrefix + "initiator.dat", numBuckets) || !reverse.createNew(filePrefix + "reverse.dat",  numBuckets))
     {
         return false;
     }
@@ -35,7 +37,7 @@ bool IntelWeb::createNew(const std::string& filePrefix, unsigned int maxDataItem
 bool IntelWeb::openExisting(const std::string &filePrefix)
 {
     close();
-    if(!initiator.openExisting(filePrefix + "initiator") || !reverse.openExisting(filePrefix + "initiator"))
+    if(!initiator.openExisting(filePrefix + "initiator.dat") || !reverse.openExisting(filePrefix + "reverse.dat"))
         return false;
     return true;
 }
@@ -50,6 +52,11 @@ bool IntelWeb::ingest(const std::string &telemetryFile)
 {
     std::ifstream inf(telemetryFile);
     InteractionTuple toInsert;
+    if (!inf)
+    {
+        cout << "Cannot open expenses file!" << endl;
+        return false;
+    }
     if (!openExisting(file_prefix))
         return false;
     std::string line;

@@ -69,6 +69,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
     toInsert.next = none;
     tracker.read(addressWhereNodePointsTO, sizeof(Header)+ keyToInsert);
     BinaryFile::Offset locOfNewNode = acquireNode();
+    std::cerr << "Adress where node points to; "<< addressWhereNodePointsTO << std::endl;
     if(addressWhereNodePointsTO == 0)
     {
         tracker.write(locOfNewNode, sizeof(Header)+ keyToInsert);

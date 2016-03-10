@@ -10,6 +10,7 @@
 		B4DCB1781C8FC72600B1CCA2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB1771C8FC72600B1CCA2 /* main.cpp */; };
 		B4DCB1981C8FE8C600B1CCA2 /* DiskMultiMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */; settings = {ASSET_TAGS = (); }; };
 		B4DCB19D1C9175E400B1CCA2 /* IntelWeb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */; settings = {ASSET_TAGS = (); }; };
+		B4DCB19F1C917DD800B1CCA2 /* p4gen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B4DCB19E1C917DD800B1CCA2 /* p4gen.cpp */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,10 @@
 		B4DCB1821C8FCB9F00B1CCA2 /* IntelWeb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IntelWeb.h; sourceTree = "<group>"; };
 		B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DiskMultiMap.cpp; sourceTree = "<group>"; };
 		B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = IntelWeb.cpp; sourceTree = "<group>"; };
+		B4DCB19E1C917DD800B1CCA2 /* p4gen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = p4gen.cpp; sourceTree = "<group>"; };
+		B4DCB1A01C917FC900B1CCA2 /* malicious.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = malicious.dat; sourceTree = "<group>"; };
+		B4DCB1A11C917FC900B1CCA2 /* sources.dat */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = sources.dat; sourceTree = "<group>"; };
+		B4DCB1A31C918AF900B1CCA2 /* outputlog.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = outputlog.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,10 +71,14 @@
 		B4DCB1761C8FC72600B1CCA2 /* CyberSpider */ = {
 			isa = PBXGroup;
 			children = (
+				B4DCB1A31C918AF900B1CCA2 /* outputlog.txt */,
 				B4DCB1771C8FC72600B1CCA2 /* main.cpp */,
+				B4DCB1A01C917FC900B1CCA2 /* malicious.dat */,
+				B4DCB1A11C917FC900B1CCA2 /* sources.dat */,
 				B4DCB17E1C8FC72F00B1CCA2 /* BinaryFile.h */,
 				B4DCB1821C8FCB9F00B1CCA2 /* IntelWeb.h */,
 				B4DCB19B1C9175E400B1CCA2 /* IntelWeb.cpp */,
+				B4DCB19E1C917DD800B1CCA2 /* p4gen.cpp */,
 				B4DCB17F1C8FC73B00B1CCA2 /* DiskMultiMap.h */,
 				B4DCB1971C8FE8C600B1CCA2 /* DiskMultiMap.cpp */,
 				B4DCB1801C8FC7C100B1CCA2 /* InteractionTuple.h */,
@@ -134,6 +143,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B4DCB19F1C917DD800B1CCA2 /* p4gen.cpp in Sources */,
 				B4DCB1781C8FC72600B1CCA2 /* main.cpp in Sources */,
 				B4DCB19D1C9175E400B1CCA2 /* IntelWeb.cpp in Sources */,
 				B4DCB1981C8FE8C600B1CCA2 /* DiskMultiMap.cpp in Sources */,
