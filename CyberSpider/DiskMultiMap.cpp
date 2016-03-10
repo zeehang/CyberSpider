@@ -22,6 +22,7 @@ DiskMultiMap::~DiskMultiMap()
 
 bool DiskMultiMap::createNew(const std::string &filename, unsigned int numBuckets)
 {
+    close();
     if(tracker.createNew(filename) == false)
         return false;
     numKeys = numBuckets;
@@ -42,6 +43,7 @@ bool DiskMultiMap::createNew(const std::string &filename, unsigned int numBucket
 
 bool DiskMultiMap::openExisting(const std::string& filename)
 {
+    close();
     return tracker.openExisting(filename);
 }
 
