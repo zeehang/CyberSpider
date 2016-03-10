@@ -88,8 +88,9 @@ private:
         BinaryFile::Offset freeList; // head of the list of nodes available for reuse
         
     };
-    
+    BinaryFile::Offset acquireNode();
     BinaryFile::Offset hashFunction (const std::string& input);
+    
     
 };
 

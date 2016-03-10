@@ -1,3 +1,5 @@
+
+
 //
 //  DiskMultiMap.cpp
 //  CyberSpider
@@ -118,6 +120,7 @@ bool DiskMultiMap::insert(const std::string& key, const std::string& value, cons
         //CHANGE THIS SO toinsert.next points to wear the binary offset of the bucket used to be - then apply this philosophy to erase
         
     }
+   
     return true;
 
 }
@@ -153,27 +156,195 @@ int DiskMultiMap::erase(const std::string& key, const std::string& value, const 
     DiskNode checkValues;
     BinaryFile::Offset bucketLoc = hashFunction(key);
     BinaryFile::Offset locofNode;
+    BinaryFile::Offset none = 0;
     tracker.read(locofNode, bucketLoc + sizeof(Header));
     if (locofNode == 0)
         return 0;
-    else
-    {
-        tracker.read(checkValues, locofNode);
-        if (checkValues.key == key && checkValues.value == value && checkValues.context == context)
-        {
-            //checkValues is the node to be deleted
-            BinaryFile::Offset locofNextNode;
-            DiskNode nextNode;
-            DiskNode iter;
-            locofNextNode = checkValues.next;
-            Header h;
-            tracker.read(h, 0);
-            if (locofNextNode == 0) //this means there is only one node with that key
+//    else
+//    {
+//        tracker.read(checkValues, locofNode);
+//        if (checkValues.key == key && checkValues.value == value && checkValues.context == context)
+//        {
+//            //checkValues is the node to be deleted
+//            BinaryFile::Offset locofNextNode;
+//            DiskNode nextNode;
+//            DiskNode iter;
+//            locofNextNode = checkValues.next;
+//            Header h;
+//            tracker.read(h, 0);
+//            if (locofNextNode == 0) //this means there is only one node with that key
+//            {
+//                tracker.write(none, bucketLoc + sizeof(Header));
+//                if (h.freeList == 0)
+//                {
+//                    h.freeList = locofNode;
+//                    tracker.write(h,0);
+//                }
+//                else
+//                {
+//                    checkValues.next = h.freeList;
+//                    h.freeList = locofNode;
+//                    tracker.write(h, 0);
+//                    tracker.write(checkValues, locofNode);
+//                }
+//                nodesDeleted++;
+//            }
+////            else //more than one node with that key
+////            {
+////                iter = checkValues;
+////                BinaryFile::Offset locOfPreviouslyDeleted;
+////                locOfPreviouslyDeleted = locofNode;
+////                do{
+////                    if (iter.key == key && iter.value == value && iter.context == context)
+////                    {
+////                    if (h.freeList == 0)
+////                        h.freeList = locofNode;
+////                    else
+////                    {
+////                        checkValues.next = h.freeList;
+////                        h.freeList = locofNode;
+////                        tracker.write(h, 0);
+////                        tracker.write(checkValues, locofNode);
+////                    }
+////                    tracker.read(iter, iter.next);
+////                        nodesDeleted++;
+////                    }
+////                }while (iter.next !=0);
+////                //BUCKET ISN'T ZERO
+////            }
+//            else
+//            {
+//                
+//            }
+//        }
+//    }
+    else{
+        BinaryFile::Offset current;
+        BinaryFile::Offset previous;
+        BinaryFile::Offset oldNext;
+        BinaryFile::Offset none = 0;
+        DiskNode iter;
+        tracker.read(iter, current);
+        Header h;
+        tracker.read(h, 0);
+        current = locofNode;
+        previous = 0;
+        do{
+            tracker.read(iter, current);
+            tracker.read(h,0);
+            oldNext = iter.next;//why does this not return 0?
+            if (iter.key == key && iter.value == value && iter.context == context)
             {
-                BinaryFile::Offset
+
+                
+                    if (previous == 0) //the first one after the bucket
+                    {
+                        BinaryFile::Offset newLocofNode = iter.next;
+                        tracker.write(newLocofNode, bucketLoc + sizeof(Header));
+                    }
+                    else
+                    {
+                    DiskNode previousNewLink;
+                    tracker.read(previousNewLink, previous);
+                    previousNewLink.next = iter.next;
+                         tracker.write(previousNewLink, previous);
+                    }
+                    //next pointer on the deleted node??
+                    if (h.freeList == 0)
+                    {
+                       
+                        h.freeList = current;
+                        iter.next = none;
+                        tracker.write(iter, current);
+                        tracker.write(h,0);
+                    }
+                    else{
+                        iter.next = h.freeList;
+                        h.freeList = current;
+                        tracker.write(iter, current);
+                        tracker.write(h,0);
+                        }
+                    if (previous !=0)
+                        previous = current;
+                    current = oldNext;
+                //                if (previous == 0) //the first one after the bucket
+//                {
+//                    BinaryFile::Offset newLocofNode = iter.next;
+//                    tracker.write(newLocofNode, bucketLoc + sizeof(Header));
+//                }
+                //UPDATE BUCKET
+                
+//                    if (h.freeList == 0)
+//                    {
+//                        h.freeList = current;
+//                        iter.next = none;
+//                        tracker.write(h,0);
+//                        tracker.write(iter, current);
+//                    }
+//                    else
+//                    {
+//                        iter.next = h.freeList;
+//                        h.freeList = current;
+//                        tracker.write(h, 0);
+//                        tracker.write(iter, current);
+//                    }
+//                    previous;
+//                    current = oldNext;
+//                }
+//                else
+//                {
+//                    BinaryFile::Offset newLocofNode;
+//                    DiskNode previousNewLink;
+//                    tracker.read(previousNewLink, previous);
+//                    previousNewLink.next = iter.next;
+//                    //next pointer on the deleted node??
+//                    if (h.freeList == 0)
+//                    {
+//                        tracker.write(previousNewLink, previous);
+//                        h.freeList = current;
+//                        iter.next = none;
+//                        tracker.write(iter, current);
+//                        tracker.write(h,0);
+//                    }
+//                    else{
+//                        iter.next = h.freeList;
+//                        h.freeList = current;
+//                        tracker.write(previousNewLink, previous);
+//                        tracker.write(iter, current);
+//                        tracker.write(h,0);
+//                    }
+//                    
+//                    previous = current;
+//                    current = oldNext;
+//               }
+                nodesDeleted++;
+                
             }
-        }
+            else{
+            
+            previous = current;
+            current = oldNext;
+            }
+            
+        }while(current != 32767);
+
     }
+    return nodesDeleted;
 }
 
-
+BinaryFile::Offset DiskMultiMap::acquireNode()
+{
+    Header h;
+    tracker.read(h, 0);
+    if (h.freeList == 0)
+        return tracker.fileLength();
+    else
+    {
+        BinaryFile::Offset toReturn = h.freeList;
+        DiskNode iter;
+        tracker.read(iter,h.freeList);
+        h.freeList = iter.next;
+        tracker.write(h, 0);
+        return toReturn;
+    }
+}
